@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Chat with Bot - CreatorHub{% endblock %}
+
+{% block content %}
+<h1>Chat about: {{ suggestion.topic }}</h1>
+<div class="chat-history">
+    <!-- Display chat history here -->
+</div>
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="user_input" placeholder="Type your message...">
+    <button type="submit" class="btn btn-primary">Send</button>
+</form>
+{% if bot_response %}
+<div class="bot-response">
+    <h3>Bot Response:</h3>
+    <p>{{ bot_response }}</p>
+</div>
+{% endif %}
+{% endblock %}

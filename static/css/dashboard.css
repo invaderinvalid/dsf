@@ -1,0 +1,57 @@
+/* Add your dashboard-specific styles here */
+.dashboard-card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.plan-usage, .files-stats, .media-storage {
+    background-color: #2d2d2d;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.circular-progress {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(var(--primary-color) 75%, #3d3d3d 0);
+    margin: 20px auto;
+}
+
+.files-stats canvas {
+    width: 100%;
+    height: 200px;
+}
+
+.media-storage table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.media-storage th, .media-storage td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #3d3d3d;
+}
+
+/* Add RGB shadow animations */
+.search-bar, .chat-icon, .btn {
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.search-bar:focus, .chat-icon:hover, .btn:hover {
+    box-shadow: 0 0 10px rgba(98, 0, 238, 0.5),
+                0 0 20px rgba(3, 218, 198, 0.5),
+                0 0 30px rgba(187, 134, 252, 0.5);
+}
+
+/* Add more styles as needed */

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Trend Analysis: {{ analysis.channel_title }} - CreatorHub{% endblock %}
+
+{% block content %}
+<h1>Trend Analysis: {{ analysis.channel_title }}</h1>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Channel Statistics</h5>
+                <p>Subscribers: {{ analysis.subscriber_count }}</p>
+                <p>Total Views: {{ analysis.view_count }}</p>
+                <p>Video Count: {{ analysis.video_count }}</p>
+                <h6>Topics:</h6>
+                <ul>
+                    {% for topic in analysis.topics.split ', ' %}
+                    <li>{{ topic }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Trending Keywords</h5>
+                <ul>
+                    {% for keyword in analysis.trending_keywords.split ', ' %}
+                    <li>{{ keyword }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Video Performance</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Views</th>
+            <th>Likes</th>
+            <th>Comments</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for video in video_performance %}
+        <tr>
+            <td>{{ video.title }}</td>
+            <td>{{ video.views }}</td>
+            <td>{{ video.likes }}</td>
+            <td>{{ video.comments }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

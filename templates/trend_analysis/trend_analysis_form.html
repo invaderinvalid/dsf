@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}New Trend Analysis - CreatorHub{% endblock %}
+
+{% block content %}
+<h1>New Trend Analysis</h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="channel_id" class="form-label">YouTube Channel ID</label>
+        <input type="text" class="form-control" id="channel_id" name="channel_id" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Analyze Trends</button>
+</form>
+{% endblock %}

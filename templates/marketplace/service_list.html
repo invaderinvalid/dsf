@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Marketplace - CreatorHub{% endblock %}
+
+{% block content %}
+<h1>Marketplace</h1>
+<a href="{% url 'create_service' %}" class="btn btn-primary mb-3">Create Service</a>
+<div class="row">
+    {% for service in services %}
+    <div class="col-md-4 mb-3">
+        <div class="card marketplace-card">
+            <div class="card-body">
+                <h5 class="card-title">{{ service.title }}</h5>
+                <p class="card-text">{{ service.description|truncatewords:20 }}</p>
+                <p class="card-text"><strong>Price:</strong> ${{ service.price }}</p>
+                <p class="card-text"><strong>Category:</strong> {{ service.get_category_display }}</p>
+                <p class="card-text"><strong>Provider:</strong> {{ service.provider.username }}</p>
+                <a href="{% url 'service_detail' service.id %}" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <p>No services available. Be the first to create a service!</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

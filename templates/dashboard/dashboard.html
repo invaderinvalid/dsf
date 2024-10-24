@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - CreatorHub{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<h1>Welcome to CreatorHub, {{ user.username }}!</h1>
+<div class="dashboard-grid">
+    <div class="dashboard-card">
+        <h2>File Management</h2>
+        <p>Organize and manage your files</p>
+        <a href="{% url 'file_list' %}" class="btn btn-primary">Go to Files</a>
+    </div>
+    <div class="dashboard-card">
+        <h2>Trend Analysis</h2>
+        <p>Analyze trends for your content</p>
+        <a href="{% url 'trend_analysis_list' %}" class="btn btn-primary">Analyze Trends</a>
+    </div>
+    <div class="dashboard-card">
+        <h2>Marketplace</h2>
+        <p>Find or offer services</p>
+        <a href="{% url 'service_list' %}" class="btn btn-primary">Go to Marketplace</a>
+    </div>
+    <div class="dashboard-card">
+        <h2>Profile</h2>
+        <p>View and edit your profile</p>
+        <a href="{% url 'profile' %}" class="btn btn-primary">Edit Profile</a>
+    </div>
+    <div class="dashboard-card">
+        <h2>Settings</h2>
+        <p>Manage your account settings</p>
+        <a href="#" class="btn btn-primary">Go to Settings</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

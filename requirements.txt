@@ -1,0 +1,4 @@
+Django
+google-api-python-client
+requests
+pytrends

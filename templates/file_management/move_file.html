@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Move File - CreatorHub{% endblock %}
+
+{% block content %}
+<h1>Move File: {{ file.name }}</h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="folder" class="form-label">Select Destination Folder</label>
+        <select name="folder" id="folder" class="form-select">
+            <option value="">Root</option>
+            {% for folder in folders %}
+                <option value="{{ folder.id }}">{{ folder.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Move File</button>
+</form>
+{% endblock %}

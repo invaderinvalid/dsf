@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Trend Analyses - CreatorHub{% endblock %}
+
+{% block content %}
+<h1>Trend Analyses</h1>
+<a href="{% url 'trend_analysis_new' %}" class="btn btn-primary mb-3">New Trend Analysis</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Channel Title</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for analysis in analyses %}
+        <tr>
+            <td>{{ analysis.channel_title }}</td>
+            <td>{{ analysis.created_at }}</td>
+            <td>
+                <a href="{% url 'trend_analysis_detail' analysis.id %}" class="btn btn-sm btn-info">View Details</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No trend analyses available.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
