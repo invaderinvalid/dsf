@@ -11,18 +11,6 @@ class Folder(models.Model):
     def __str__(self):
         return self.name
 
-class File(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    folder = models.ForeignKey(Folder, on_delete=models.CASCADE, null=True, blank=True, related_name='files')
-    file = models.FileField(upload_to='uploads/')
-    name = models.CharField(max_length=255)
-    category = models.CharField(max_length=100, blank=True)
-    ai_category = models.CharField(max_length=100, blank=True)  # Ensure this field is present
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-
 class Project(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
@@ -32,6 +20,32 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+class File(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='files')
+    file = models.FileField(upload_to='uploads/')
+    name = models.CharField(max_length=255)
+    category = models.CharField(max_length=100, blank=True)
+    ai_category = models.CharField(max_length=100, blank=True, null=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    file_type = models.CharField(max_length=50, blank=True)
+    file_size = models.IntegerField(default=0)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        # Set file type based on extension
+        _, extension = os.path.splitext(self.file.name)
+        self.file_type = extension.lower()[1:]  # Remove the dot
+        
+        # Set file size
+        if self.file:
+            self.file_size = self.file.size
+        
+        super().save(*args, **kwargs)
 
 class Asset(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='assets')

@@ -6,20 +6,19 @@ from .forms import TrendAnalysisForm
 from .utils import get_channel_info, generate_trend_suggestions
 from django.conf import settings
 from .api_utils import get_youtube_channel_data
+from .ondemand_api import get_trend_analysis, get_trending_topics
 
 @login_required
 def trend_analysis_list(request):
-    analyses = TrendAnalysis.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'trend_analysis/trend_analysis_list.html', {'analyses': analyses})
+    trending_topics_data = get_trending_topics()
+    trending_topics = process_trending_topics(trending_topics_data)
+    return render(request, 'trend_analysis/trend_analysis_list.html', {'trending_topics': trending_topics})
 
 @login_required
-def trend_analysis_detail(request, analysis_id):
-    analysis = get_object_or_404(TrendAnalysis, id=analysis_id, user=request.user)
-    suggestions = TrendSuggestion.objects.filter(trend_analysis=analysis)
-    return render(request, 'trend_analysis/trend_analysis_detail.html', {
-        'analysis': analysis,
-        'suggestions': suggestions
-    })
+def trend_analysis_detail(request, topic):
+    analysis_data = get_trend_analysis(topic)
+    processed_data = process_analysis_data(analysis_data)
+    return render(request, 'trend_analysis/trend_analysis_detail.html', {'analysis_data': processed_data, 'topic': topic})
 
 @login_required
 def create_trend_analysis(request):
@@ -60,3 +59,23 @@ def chat_with_bot(request, suggestion_id):
             'bot_response': bot_response
         })
     return render(request, 'trend_analysis/chat_with_bot.html', {'suggestion': suggestion})
+
+def process_trending_topics(data):
+    # Process the raw data from on-demand.io to extract trending topics
+    # This function should be implemented based on the structure of the response
+    # For now, we'll return a placeholder list
+    return ["Topic 1", "Topic 2", "Topic 3"]
+
+def process_analysis_data(data):
+    # Process the raw data from on-demand.io to extract relevant trend analysis information
+    # This function should be implemented based on the structure of the response
+    # For now, we'll return a placeholder dictionary
+    return {
+        "popularity_score": 85,
+        "related_keywords": ["keyword1", "keyword2", "keyword3"],
+        "sentiment": {
+            "positive": 60,
+            "neutral": 30,
+            "negative": 10
+        }
+    }

@@ -2,9 +2,17 @@ from django import forms
 from .models import File, Folder, Project, Asset, Comment
 
 class FileUploadForm(forms.ModelForm):
+    project = forms.ModelChoiceField(queryset=Project.objects.none())
+
     class Meta:
         model = File
-        fields = ['file', 'name']
+        fields = ['file', 'name', 'description']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(FileUploadForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['project'].queryset = Project.objects.filter(owner=user)
 
 class FolderForm(forms.ModelForm):
     class Meta:

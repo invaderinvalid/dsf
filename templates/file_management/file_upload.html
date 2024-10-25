@@ -3,10 +3,16 @@
 {% block title %}Upload File - CreatorHub{% endblock %}
 
 {% block content %}
-<h1>Upload File</h1>
+<h2>Upload File</h2>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Upload</button>
+    <label for="project">Project:</label>
+    <select name="project" id="project" required>
+        {% for project in projects %}
+            <option value="{{ project.id }}">{{ project.name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Upload</button>
 </form>
 {% endblock %}

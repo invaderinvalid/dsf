@@ -165,8 +165,6 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Third-party API keys (replace with your actual keys)
 YOUTUBE_API_KEY = 'your-youtube-api-key'
-# GOOGLE_TRENDS_API_KEY = 'your-google-trends-api-key'
-ONDEMAND_IO_API_KEY = 'qUh6ybNqaPqbA7yr1mBMJcmUy01n48Zh'
 
 # Encryption key for YouTube channel ID
 ENCRYPTION_KEY = b'your-32-byte-encryption-key-here'  # Generate a secure key and keep it secret
@@ -177,3 +175,9 @@ OPENAI_API_KEY = 'your-openai-api-key-here'
 # Add these lines to the existing settings file
 GEMINI_API_KEY = 'AIzaSyC-jpWtg4IxW9pHiPtWiGVstm29rTKZswI'
 USE_GEMINI = True  # Set this to False to use OpenAI as the default
+
+# Add these lines to your settings.py file
+
+# On-demand.io API settings
+ONDEMAND_API_KEY = 'qUh6ybNqaPqbA7yr1mBMJcmUy01n48Zh'  # Replace with your actual API key
+  # Replace with your actual external user ID

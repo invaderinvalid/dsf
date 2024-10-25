@@ -3,9 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import File, Folder, Project, Asset, AssetVersion, Comment
 from .forms import FileUploadForm, FolderForm, ProjectForm, AssetForm, CommentForm
-from .ondemand_api import categorize_file
+from trend_analysis.ondemand_api import categorize_file  # Import the new function
 from django.db.models import Q
 from .ai_tagging import tag_file  # You'll need to implement this function
+from django.views.generic import ListView
+import os
 
 @login_required
 def file_list(request, folder_id=None):
@@ -31,18 +33,44 @@ def file_upload(request):
         if form.is_valid():
             file = form.save(commit=False)
             file.user = request.user
+            
+            # Get the project
+            project_id = request.POST.get('project')
+            project = get_object_or_404(Project, id=project_id, owner=request.user)
+            file.project = project
+            
+            # Save the file to get its path
             file.save()
             
-            # AI tagging
-            ai_category = tag_file(file.file.path)
-            file.ai_category = ai_category
-            file.save()
+            # Read file content (be cautious with large files)
+            with open(file.file.path, 'rb') as f:
+                file_content = f.read(1000).decode('utf-8', errors='ignore')  # Read first 1000 bytes
             
-            messages.success(request, f"File '{file.name}' uploaded and tagged as '{ai_category}'.")
-            return redirect('file_list')
+            # AI categorization
+            ai_category = categorize_file(file_content, file.name)
+            if ai_category:
+                file.ai_category = ai_category
+                
+                # Create folder based on AI category
+                folder_path = os.path.join('media', 'uploads', project.name, ai_category)
+                os.makedirs(folder_path, exist_ok=True)
+                
+                # Move the file to the new folder
+                new_path = os.path.join(folder_path, file.name)
+                os.rename(file.file.path, new_path)
+                file.file.name = os.path.relpath(new_path, 'media')
+                
+                file.save()
+                messages.success(request, f"File '{file.name}' uploaded and categorized as '{ai_category}'.")
+            else:
+                messages.warning(request, f"File '{file.name}' uploaded, but categorization failed.")
+            
+            return redirect('project_detail', project_id=project.id)
     else:
         form = FileUploadForm()
-    return render(request, 'file_management/file_upload.html', {'form': form})
+    
+    projects = Project.objects.filter(owner=request.user)
+    return render(request, 'file_management/file_upload.html', {'form': form, 'projects': projects})
 
 @login_required
 def create_folder(request, parent_id=None):
@@ -81,10 +109,18 @@ def move_file(request, file_id):
 @login_required
 def ai_categorize(request, file_id):
     file = get_object_or_404(File, id=file_id, user=request.user)
-    ai_category = categorize_file(file.file.path)
-    file.ai_category = ai_category
-    file.save()
-    messages.success(request, f"File '{file.name}' has been categorized as '{ai_category}'.")
+    
+    # Read file content (be cautious with large files)
+    file_content = file.file.read().decode('utf-8', errors='ignore')
+    
+    ai_category = categorize_file(file_content, file.name)
+    if ai_category:
+        file.ai_category = ai_category
+        file.save()
+        messages.success(request, f"File '{file.name}' has been categorized as '{ai_category}'.")
+    else:
+        messages.error(request, f"Categorization failed for file '{file.name}'.")
+    
     return redirect('file_list')
 
 @login_required
@@ -207,3 +243,8 @@ def folder_contents(request, folder_id):
         'subfolders': subfolders,
         'current_folder': folder
     })
+
+class ProjectListView(ListView):
+    model = Project
+    template_name = 'file_management/project_list.html'
+    context_object_name = 'projects'

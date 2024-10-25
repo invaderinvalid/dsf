@@ -1,4 +1,11 @@
 /* Add your base styles here */
+*{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #ffffff;
+}
+input{
+    color:#1a1a1a;
+}
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
@@ -38,20 +45,44 @@ body.dark-theme {
     background-color: #2d2d2d;
     padding: 20px;
     grid-row: 1 / -1;
+    min-height: 100vh;
 }
 
 .sidebar ul {
     list-style-type: none;
     padding: 0;
+    margin-top: 20px;
 }
 
 .sidebar li {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
-.sidebar a {
+.sidebar ul li a {
+    display: block;
+    padding: 12px 15px;
     color: var(--text-color);
     text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 5px;
+}
+
+.sidebar ul li a:hover {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.sidebar ul li:last-child {
+    margin-top: auto;
+}
+
+.sidebar ul li:last-child a {
+    color: #ff6b6b;
+}
+
+.sidebar ul li:last-child a:hover {
+    background-color: #ff6b6b;
+    color: #ffffff;
 }
 
 .main-content {
