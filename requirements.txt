@@ -2,3 +2,6 @@ Django
 google-api-python-client
 requests
 pytrends
+cryptography
+google.generativeai
+openai
